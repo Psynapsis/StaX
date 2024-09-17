@@ -9,8 +9,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\StaX.ico</ApplicationIcon>
     <OutDir>../../Build</OutDir>
-    <Version>1.1.0.0</Version>
-    <Company>ADVIN</Company>
+    <Version>1.0.0.0</Version>
+    <Company>Psynapsis</Company>
     <FileVersion>1.1.0.0</FileVersion>
     <Platforms>x64</Platforms>
     <PublishDir>../../Publish</PublishDir>
