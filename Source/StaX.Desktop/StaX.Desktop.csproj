@@ -7,7 +7,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <ApplicationIcon>Assets\logo.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\StaX.ico</ApplicationIcon>
     <OutDir>../../Build</OutDir>
     <Version>1.1.0.0</Version>
     <Company>ADVIN</Company>
@@ -23,11 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Assets\logo.ico" />
+    <None Remove="Assets\StaX.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Assets\logo.ico" />
+    <Content Include="Assets\StaX.ico" />
   </ItemGroup>
 
   <ItemGroup>

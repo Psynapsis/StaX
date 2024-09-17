@@ -10,7 +10,7 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     Background="{DynamicResource ApplicationPageBackgroundBrush}"
-    Icon="/Assets/logo.ico"
+    Icon="/Assets/StaX.ico"
     TransparencyLevelHint="AcrylicBlur"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
@@ -51,7 +51,7 @@
                         Stretch="UniformToFill" />-->
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
-            <ui:ImageIconSource x:Key="AppLogo" Source="/Assets/logo.ico" />
+            <ui:ImageIconSource x:Key="AppLogo" Source="/Assets/StaX.ico" />
         </ResourceDictionary>
     </Window.Resources>
 
