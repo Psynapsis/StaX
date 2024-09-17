@@ -11,7 +11,7 @@
     <OutDir>../../Build</OutDir>
     <Version>1.0.0.0</Version>
     <Company>Psynapsis</Company>
-    <FileVersion>1.1.0.0</FileVersion>
+    <FileVersion>1.0.0.0</FileVersion>
     <Platforms>x64</Platforms>
     <PublishDir>../../Publish</PublishDir>
     <PackageId>$(AssemblyName)</PackageId>
@@ -33,12 +33,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.9" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.3" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.9" />
-    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.8.12" />
-    <PackageReference Include="StaX.Domain" Version="1.0.1" />
-    <PackageReference Include="System.ComponentModel.Composition" Version="8.0.0" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.1.3" />
+    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="15.2.22" />
+    <PackageReference Include="StaX.Domain" Version="1.0.2" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="9.0.0-preview.5.24306.7" />
   </ItemGroup>
 
   <ItemGroup>

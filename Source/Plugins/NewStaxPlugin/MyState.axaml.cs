@@ -11,7 +11,7 @@ namespace NewStaxPlugin
     {
         public override string StateName { get; protected set; } = "NewStaxPlugin";
         public override string ToolTip { get; protected set; } = "NewStaxPlugin";
-        public override Symbol? Icon { get; protected set; } = Symbol.Account;
+        public override Symbol? Icon { get; protected set; } = Symbol.ShareAndroid;
 
         public MyState()
         {

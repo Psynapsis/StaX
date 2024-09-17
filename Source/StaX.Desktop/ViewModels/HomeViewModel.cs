@@ -12,7 +12,7 @@ namespace StaX.Desktop.ViewModels;
 
 public class HomeViewModel : ViewModelBase
 {
-    private Subject<Transition> _subject;
+    private readonly Subject<Transition> _subject;
 
     private AvaloniaList<LazyUiState> _states;
 
@@ -26,6 +26,11 @@ public class HomeViewModel : ViewModelBase
 
     public HomeViewModel()
     {
+        _subject = new Subject<Transition>();
+        _states = [];
+        SendSubjectCommand = ReactiveCommand.Create<string>(
+            execute: SendSubject,
+            outputScheduler: AvaloniaScheduler.Instance);
     }
 
     public HomeViewModel(List<LazyUiState> States, Subject<Transition> subject)

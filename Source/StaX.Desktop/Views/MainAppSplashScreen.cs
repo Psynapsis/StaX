@@ -46,7 +46,7 @@ internal class MainAppSplashScreen(string[]? args, MainWindowViewModel mainWindo
                 => this.RaisePropertyChanged(nameof(PluginLoaderVisualizator.Icons));
 
 
-            if (_pluginLoaderVisualizator is not null)
+            if (_pluginLoaderVisualizator is not null && PluginLoaderVisualizator.Icons is not null)
             {
                 PluginLoaderVisualizator.Icons.CollectionChanged += _icons_CollectionChanged;
                 await _serviceLocator.RegisterAsync(_pluginLoaderVisualizator, args);

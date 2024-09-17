@@ -46,32 +46,36 @@ public class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel()
     {
+        _uiProcess = new();
         ChangeThemeCommand = ReactiveCommand.Create<string>(
             execute: ChangeTheme,
             outputScheduler: AvaloniaScheduler.Instance);
     }
 
-    public void ChangeTheme(string v)
+    public static void ChangeTheme(string v)
     {
-        var application = Avalonia.Application.Current;
-        if (application.ActualThemeVariant == ThemeVariant.Light)
-            application.RequestedThemeVariant = ThemeVariant.Dark;
-        else
-            application.RequestedThemeVariant = ThemeVariant.Light;
+        if (Avalonia.Application.Current != null)
+        {
+            var application = Avalonia.Application.Current;
+            if (application.ActualThemeVariant == ThemeVariant.Light)
+                application.RequestedThemeVariant = ThemeVariant.Dark;
+            else
+                application.RequestedThemeVariant = ThemeVariant.Light;
+        }
     }
 
-    private UiProcess uiProcess;
+    private UiProcess _uiProcess;
 
     public async Task StartProcessAsync()
     {
-        uiProcess = Locator.Current.GetService<UiProcess>()!;
+        _uiProcess = Locator.Current.GetService<UiProcess>()!;
         var uiStateTridderPairs = Locator.Current.GetService<List<LazyUiState>>()!;
 
-        if (uiProcess is not null && uiStateTridderPairs is not null)
+        if (_uiProcess is not null && uiStateTridderPairs is not null)
         {
-            await uiProcess.AddStatesAsync(uiStateTridderPairs);
-            AvailableStates = new List<LazyUiState>(uiProcess.AvailableStates);
-            uiProcess!.StateChanged.Subscribe(SetTransitionState);
+            await _uiProcess.AddStatesAsync(uiStateTridderPairs);
+            AvailableStates = new List<LazyUiState>(_uiProcess.AvailableStates);
+            _uiProcess!.StateChanged.Subscribe(SetTransitionState);
         }
 
         if (AvailableStates?.Count == 2)
@@ -92,7 +96,7 @@ public class MainWindowViewModel : ViewModelBase
 
     private void SetTransitionState(UiTransition selectedState)
     {
-        var lazyState = uiProcess.AvailableStates.Where(x => x.StateName == selectedState.State.StateName).FirstOrDefault();
+        var lazyState = _uiProcess.AvailableStates.Where(x => x.StateName == selectedState.State.StateName).FirstOrDefault();
         if (lazyState is not null)
         {
             this.RaiseAndSetIfChanged(ref _selectedState, lazyState);
@@ -110,12 +114,12 @@ public class MainWindowViewModel : ViewModelBase
         {
             Dispatcher.UIThread.Invoke(async () =>
             {
-                if (CurrentStateContent is not null)
+                if (CurrentStateContent is not null && CurrentStateContent.UiState is not null)
                     await CurrentStateContent.UiState.StateViewModel.ExitActionAsync();
 
                 CurrentStateContent = selectedState;
 
-                if (CurrentStateContent is not null)
+                if (CurrentStateContent is not null && CurrentStateContent.UiState is not null)
                     await CurrentStateContent.UiState.StateViewModel.EntryActionAsync();
             });
         }
@@ -127,12 +131,12 @@ public class MainWindowViewModel : ViewModelBase
         {
             Dispatcher.UIThread.Invoke(async () =>
             {
-                if (CurrentStateContent is not null)
+                if (CurrentStateContent is not null && CurrentStateContent.UiState is not null)
                     await CurrentStateContent.UiState.StateViewModel.ExitActionAsync();
 
                 CurrentStateContent = selectedState;
 
-                if (CurrentStateContent is not null)
+                if (CurrentStateContent is not null && CurrentStateContent.UiState is not null)
                     await CurrentStateContent.UiState.StateViewModel.EntryActionAsync(parameter);
             });
         }
