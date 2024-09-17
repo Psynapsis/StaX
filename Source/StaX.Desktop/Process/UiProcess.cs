@@ -48,7 +48,7 @@ public class UiProcess
             if (uiTransition is not null)
                 Transit(uiTransition);
         }
-        catch (Exception ex)
+        catch
         {
             //ingnore
         }
@@ -56,14 +56,16 @@ public class UiProcess
 
     public static async Task<UiTransition> GetFrom(List<LazyUiState> availableStates, Transition transition)
     {
-        LazyUiState uiState = availableStates.Where(x => x.StateName == transition.NameState).FirstOrDefault();
+        LazyUiState? uiState = availableStates.Where(x => x.StateName == transition.NameState).FirstOrDefault();
         if (uiState != null)
         {
             if (uiState.IsLoaded == false)
                 await uiState.InitializeAsync();
-            return new UiTransition(uiState.UiState, transition.Parameter);
+
+            if (uiState.UiState is not null)
+                return new UiTransition(uiState.UiState, transition.Parameter);
         }
 
-        return new UiTransition(availableStates.FirstOrDefault(x => x.IsLoaded).UiState);
+        return new UiTransition(availableStates.FirstOrDefault(x => x.IsLoaded)?.UiState ?? new HomeState([]));
     }
 }

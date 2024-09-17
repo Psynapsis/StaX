@@ -60,12 +60,15 @@ public class LazyUiState
     public async Task InitializeAsync()
         => await Dispatcher.UIThread.InvokeAsync(() =>
         {
-            var pathToDll = Path.Combine(_currentPluginFolder, "Plugin", _starter.Implementer);
-            var state = GetUiStateFromDll(pathToDll);
-            if (state is not null)
-                LoadNativeRuntimeDlls(Path.Combine(_currentPluginFolder, "Plugin"));
-
-            UiState = state;
+            if (_starter is not null)
+            {
+                var pathToDll = Path.Combine(_currentPluginFolder, "Plugin", _starter.Implementer);
+                var state = GetUiStateFromDll(pathToDll);
+                if (state is not null)
+                    LoadNativeRuntimeDlls(Path.Combine(_currentPluginFolder, "Plugin"));
+                
+                UiState = state;
+            }
             IsLoaded = UiState is not null;
 
         });
@@ -140,6 +143,6 @@ public class LazyUiState
                 {
                     NativeLibrary.Load(file);
                 }
-                catch (Exception ex) {  /*not implemented*/ }
+                catch {  /*not implemented*/ }
     }
 }

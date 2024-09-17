@@ -17,7 +17,7 @@ namespace StaX.Desktop;
 internal class ServiceLocator
 {
     private const string PluginsDir = "Plugins";
-    private PluginLoaderVisualizator _pluginLoaderVisualizator;
+    private PluginLoaderVisualizator? _pluginLoaderVisualizator;
 
     public Task RegisterAsync(PluginLoaderVisualizator pluginLoaderVisualizator, string[]? args)
     {
@@ -61,9 +61,9 @@ internal class ServiceLocator
             services.AddSingleton(states);
             services.AddSingleton<UiProcess>();
         }
-        catch (Exception ex)
+        catch
         {
-            //
+            //ignore
         }
     }
 
@@ -91,9 +91,9 @@ internal class ServiceLocator
                     states.Add(GetLazy(directory));
             }
         }
-        catch (Exception ex)
+        catch
         {
-            //
+            //ignore
         }
         return states;
     }
@@ -108,7 +108,10 @@ internal class ServiceLocator
             {
                 string extractedFilePath = Path.Combine(destinationFolder, entry.FullName);
 
-                Directory.CreateDirectory(Path.GetDirectoryName(extractedFilePath));
+                string? extractedDirPath = Path.GetDirectoryName(extractedFilePath);
+
+                if (extractedDirPath != null)
+                    Directory.CreateDirectory(extractedDirPath);
 
                 entry.ExtractToFile(extractedFilePath, true);
                 extractedFiles[Array.IndexOf(extractedFiles, null)] = extractedFilePath;
@@ -122,9 +125,12 @@ internal class ServiceLocator
     {
         Dispatcher.UIThread.Invoke(() =>
         {
-            var collection = _pluginLoaderVisualizator.Icons;
-            collection?.Add(uiState?.Icon ?? Symbol.Add);
-            _pluginLoaderVisualizator.Icons = collection;
+            if (_pluginLoaderVisualizator != null)
+            {
+                var collection = _pluginLoaderVisualizator.Icons;
+                collection?.Add(uiState?.Icon ?? Symbol.Add);
+                _pluginLoaderVisualizator.Icons = collection;
+            }
         });
     }
 

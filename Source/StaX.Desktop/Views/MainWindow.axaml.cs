@@ -22,8 +22,8 @@ public partial class MainWindow : AppWindow
 #if DEBUG
         this.AttachDevTools();
 #endif
-
-        Application.Current.ActualThemeVariantChanged += OnActualThemeVariantChanged;
+        if (Application.Current != null)
+            Application.Current.ActualThemeVariantChanged += OnActualThemeVariantChanged;
     }
 
     public MainWindow(string[]? args)
@@ -40,19 +40,22 @@ public partial class MainWindow : AppWindow
         this.AttachDevTools();
 #endif
 
-        Application.Current.ActualThemeVariantChanged += OnActualThemeVariantChanged;
+        if (Application.Current != null)
+            Application.Current.ActualThemeVariantChanged += OnActualThemeVariantChanged;
     }
 
     private void ThemeButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        var application = Application.Current;
-        if (application.ActualThemeVariant == ThemeVariant.Light)
-            application.RequestedThemeVariant = ThemeVariant.Dark;
-        else
-            application.RequestedThemeVariant = ThemeVariant.Light;
+        if (Application.Current != null)
+        {
+            if (Application.Current.ActualThemeVariant == ThemeVariant.Light)
+                Application.Current.RequestedThemeVariant = ThemeVariant.Dark;
+            else
+                Application.Current.RequestedThemeVariant = ThemeVariant.Light;
+        }
     }
 
-    private void OnActualThemeVariantChanged(object sender, EventArgs e)
+    private void OnActualThemeVariantChanged(object? sender, EventArgs e)
     {
         if (IsWindows11)
         {
