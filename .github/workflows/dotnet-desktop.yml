@@ -39,6 +39,5 @@ jobs:
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
-        working-directory:
         name: StaX.Desktop
         path: $env.Wap_Project_Directory
