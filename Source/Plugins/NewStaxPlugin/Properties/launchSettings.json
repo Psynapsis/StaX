@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "NewStaxPlugin": {
+      "commandName": "Executable",
+      "executablePath": "..\\..\\..\\DebugBuild\\StaXDebug.exe",
+      "commandLineArgs": "NewStaxPlugin.dll"
+    }
+  }
+}

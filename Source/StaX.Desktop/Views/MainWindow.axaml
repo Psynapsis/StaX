@@ -1,0 +1,94 @@
+<Window
+    x:Class="StaX.Desktop.Views.MainWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+    xmlns:vm="using:StaX.Desktop.ViewModels"
+    Title="StaX"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    Background="{DynamicResource ApplicationPageBackgroundBrush}"
+    Icon="/Assets/logo.ico"
+    TransparencyLevelHint="AcrylicBlur"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <SolidColorBrush
+                x:Key="ApplicationPageBackgroundBrush"
+                Opacity="0.75"
+                Color="{DynamicResource SolidBackgroundFillColorBase}" />
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <ui:SymbolIcon
+                        x:Key="ThemeIcon"
+                        Margin="0"
+                        FontSize="21"
+                        Symbol="WeatherMoon" />
+                    <!--<ImageBrush
+                        x:Key="LogoImageBrush"
+                        AlignmentY="Center"
+                        Source="/Assets/BlackLogo.png"
+                        Stretch="UniformToFill" />-->
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <ui:SymbolIcon
+                        x:Key="ThemeIcon"
+                        Margin="0"
+                        FontSize="21"
+                        Symbol="WeatherSunny" />
+                    <!--<ImageBrush
+                        x:Key="LogoImageBrush"
+                        AlignmentY="Center"
+                        Source="/Assets/Logo.png"
+                        Stretch="UniformToFill" />-->
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+            <ui:ImageIconSource x:Key="AppLogo" Source="/Assets/logo.ico" />
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid>
+        <Panel Background="{DynamicResource ApplicationPageBackgroundThemeBrush}" Opacity="0.05">
+            <Border
+                Width="892"
+                Height="174"
+                ClipToBounds="True"
+                CornerRadius="8 0 0 0"
+                RenderOptions.BitmapInterpolationMode="HighQuality" />
+            <!--  Background="{DynamicResource LogoImageBrush}"  -->
+        </Panel>
+        <ui:NavigationView
+            x:Name="nvSample"
+            Content="{Binding CurrentStateContent}"
+            IsSettingsVisible="False"
+            MenuItemsSource="{Binding AvailableStates}"
+            PaneDisplayMode="LeftCompact"
+            SelectedItem="{Binding SelectedState}">
+            <ui:NavigationView.MenuItemTemplate>
+                <DataTemplate>
+                    <ui:NavigationViewItem
+                        Content="{Binding StateName}"
+                        IconSource="{Binding Icon}"
+                        ToolTip.Tip="{Binding ToolTip}" />
+                </DataTemplate>
+            </ui:NavigationView.MenuItemTemplate>
+        </ui:NavigationView>
+        <Button
+            MinWidth="27"
+            MinHeight="27"
+            Margin="0,3,142,0"
+            Padding="0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Command="{Binding ChangeThemeCommand}"
+            Content="{DynamicResource ThemeIcon}" />
+    </Grid>
+</Window>

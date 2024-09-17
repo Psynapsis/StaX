@@ -1,0 +1,73 @@
+<UserControl
+    x:Class="StaX.Desktop.Views.MainAppSplashContent"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sty="using:FluentAvalonia.Styling"
+    xmlns:ui="using:FluentAvalonia.UI.Controls"
+    d:DesignHeight="720"
+    d:DesignWidth="1280"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <!--<ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <ImageBrush
+                        x:Key="LogoImageBrush"
+                        AlignmentY="Center"
+                        Source="/Assets/BlackLogo.png"
+                        Stretch="UniformToFill" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <ImageBrush
+                        x:Key="LogoImageBrush"
+                        AlignmentY="Center"
+                        Source="/Assets/Logo.png"
+                        Stretch="UniformToFill" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>-->
+            <ui:ImageIconSource x:Key="AppLogo" Source="/Assets/logo.ico" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Panel Background="{DynamicResource ApplicationPageBackgroundThemeBrush}">
+        <Border
+            Width="892"
+            Height="174"
+            ClipToBounds="True"
+            CornerRadius="8 0 0 0"
+            RenderOptions.BitmapInterpolationMode="HighQuality" />
+
+        <!--  Background="{DynamicResource LogoImageBrush}"  -->
+
+        <ui:IconSourceElement
+            Width="150"
+            Height="150"
+            Margin="-920,0,0,-100"
+            IconSource="{StaticResource AppLogo}" />
+        <Grid
+            Margin="0,0,0,-120"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+            <ui:ItemsRepeater ItemsSource="{Binding PluginLoaderVisualizator.Icons}">
+                <ui:ItemsRepeater.Layout>
+                    <ui:StackLayout Orientation="Horizontal" Spacing="1" />
+                </ui:ItemsRepeater.Layout>
+                <ui:ItemsRepeater.ItemTemplate>
+                    <DataTemplate>
+                        <ui:SymbolIcon
+                            FontSize="50"
+                            Foreground="{DynamicResource AccentFillColorDefaultBrush}"
+                            Symbol="{Binding}">
+                            <ui:SymbolIcon.Effect>
+                                <DropShadowEffect />
+                            </ui:SymbolIcon.Effect>
+                        </ui:SymbolIcon>
+                    </DataTemplate>
+                </ui:ItemsRepeater.ItemTemplate>
+            </ui:ItemsRepeater>
+        </Grid>
+    </Panel>
+</UserControl>

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "StaX.Desktop": {
+      "commandName": "Project",
+      "commandLineArgs": ""
+    }
+  }
+}

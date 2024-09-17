@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <OutDir>../../DebugBuild</OutDir>
+    <PackageId>$(AssemblyName)</PackageId>
+    <AssemblyName>StaXDebug</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Version>1.1.0.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StaX.Domain" Version="1.0.1" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="9.0.0-preview.5.24306.7" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.9" />
+  </ItemGroup>
+</Project>

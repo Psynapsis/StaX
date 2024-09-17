@@ -1,0 +1,130 @@
+<UserControl
+    x:Class="StaX.Desktop.Views.HomeView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:StaX.Domain.UIConverters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="using:FluentAvalonia.UI.Controls"
+    xmlns:vm="using:StaX.Desktop.ViewModels"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+
+    <Design.DataContext>
+        <vm:HomeViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="27, *">
+        <ScrollViewer
+            Grid.Row="1"
+            Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RowDefinition}}"
+            Margin="0,5"
+            HorizontalAlignment="Stretch"
+            AllowAutoHide="True"
+            VerticalScrollBarVisibility="Auto">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock
+                    Margin="0,0,0,30"
+                    HorizontalAlignment="Center"
+                    FontSize="50"
+                    FontWeight="ExtraBold"
+                    Text="StaX" />
+                <ItemsControl
+                    Margin="1"
+                    HorizontalAlignment="Center"
+                    ItemsSource="{Binding States}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.Styles>
+                                    <Style Selector="Panel#mPanel:pointerover">
+                                        <Style Selector="^ Border#mBorder2">
+                                            <Setter Property="BorderThickness" Value="1" />
+                                            <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                        </Style>
+                                    </Style>
+                                </Grid.Styles>
+                                <Panel Name="mPanel" Background="Transparent">
+                                    <Grid>
+                                        <Border
+                                            Name="mBorder"
+                                            Width="280"
+                                            Height="350"
+                                            Margin="7"
+                                            ClipToBounds="True"
+                                            CornerRadius="15">
+                                            <Grid>
+                                                <ExperimentalAcrylicBorder CornerRadius="15">
+                                                    <ExperimentalAcrylicBorder.Material>
+                                                        <ExperimentalAcrylicMaterial
+                                                            BackgroundSource="Digger"
+                                                            MaterialOpacity="0.5"
+                                                            TintColor="{DynamicResource SolidBackgroundFillColorBase}"
+                                                            TintOpacity="0.9" />
+                                                    </ExperimentalAcrylicBorder.Material>
+                                                </ExperimentalAcrylicBorder>
+                                            </Grid>
+                                        </Border>
+                                        <Button
+                                            Width="280"
+                                            Height="350"
+                                            Margin="7"
+                                            Padding="0"
+                                            Command="{Binding $parent[ItemsControl].DataContext.SendSubjectCommand}"
+                                            CommandParameter="{Binding StateName}"
+                                            CornerRadius="15">
+                                            <Border
+                                                Width="280"
+                                                Height="350"
+                                                Margin="0"
+                                                ClipToBounds="True"
+                                                CornerRadius="15">
+                                                <ui:SymbolIcon
+                                                    Margin="-120,0,0,-200"
+                                                    FontSize="350"
+                                                    Foreground="{DynamicResource AccentFillColorDefaultBrush}"
+                                                    Symbol="{Binding Icon}">
+                                                    <ui:SymbolIcon.Effect>
+                                                        <DropShadowEffect />
+                                                    </ui:SymbolIcon.Effect>
+                                                </ui:SymbolIcon>
+                                            </Border>
+                                        </Button>
+                                        <StackPanel Width="280">
+                                            <TextBlock
+                                                Margin="10,15,10,5"
+                                                HorizontalAlignment="Center"
+                                                FontSize="22"
+                                                Text="{Binding StateName}"
+                                                TextWrapping="Wrap" />
+                                            <TextBlock
+                                                Margin="5"
+                                                HorizontalAlignment="Center"
+                                                FontSize="16"
+                                                Text="{Binding ToolTip}"
+                                                TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <Border
+                                            Name="mBorder2"
+                                            Width="280"
+                                            Height="350"
+                                            Margin="7"
+                                            ClipToBounds="True"
+                                            CornerRadius="15" />
+                                    </Grid>
+                                </Panel>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+
+    </Grid>
+</UserControl>
