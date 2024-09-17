@@ -28,11 +28,8 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v2
-
-    - name: Restore the application
-      run: dotnet publish $env:Solution_Name -p:PublishSingleFile=True --self-contained true -c $env.Configuration -r win-x64 -o $env.Wap_Project_Directory
+    - name: Publish the application
+      run: dotnet publish $env:Solution_Name -p:PublishSingleFile=True --no-self-contained False -c $env.Configuration -r win-x64 -o $env.Wap_Project_Directory
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
