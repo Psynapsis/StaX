@@ -28,7 +28,7 @@
                         Stretch="UniformToFill" />
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>-->
-            <ui:ImageIconSource x:Key="AppLogo" Source="/Assets/logo.ico" />
+            <ui:ImageIconSource x:Key="AppLogo" Source="/Assets/StaX.ico" />
         </ResourceDictionary>
     </UserControl.Resources>
 
