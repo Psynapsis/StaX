@@ -65,7 +65,7 @@ public partial class App : Application
                 {
                     NativeLibrary.Load(file);
                 }
-                catch (Exception ex) {  /*not implemented*/ }
+                catch {  /*not implemented*/ }
 
         var files = Directory.GetFiles(path);
         foreach (var file in files)
@@ -73,8 +73,7 @@ public partial class App : Application
             {
                 Assembly.LoadFile(file);
             }
-            catch (Exception ex)
-            {  /*not implemented*/ }
+            catch {  /*not implemented*/ }
     }
 
     private static IUiState? LoadPlugin(string path)
@@ -83,6 +82,10 @@ public partial class App : Application
         List<IUiState> states = [];
 
         var pluginFolder = Directory.GetParent(fullPath);
+
+        if (pluginFolder is null)
+            return null;
+
         SetDllDirectory(pluginFolder.FullName);
 
         using (var catalog = new DirectoryCatalog(pluginFolder.FullName))
@@ -101,8 +104,9 @@ public partial class App : Application
                         if (stateInstance != null && stateInstance is IUiState uiState)
                             states.Add(uiState);
                     }
-                    catch (Exception ex)
+                    catch
                     {
+                        //ignore
                     }
                 }
             }
