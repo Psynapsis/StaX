@@ -29,10 +29,10 @@ jobs:
         dotnet-version: '8.0.x'
 
     - name: Publish the application
-      run: dotnet publish $env.Wap_Project_Path -p:PublishSingleFile=True --no-self-contained=False -c $env.Configuration -o $env.Wap_Project_Directory
+      run: dotnet publish $env.Wap_Project_Path -p:PublishSingleFile=True --sc true -c $env.Configuration -o $env.Wap_Project_Directory
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: MSIX Package
+        name: StaX.Desktop
         path: $env.Wap_Project_Directory
