@@ -32,11 +32,11 @@
                         Margin="0"
                         FontSize="21"
                         Symbol="WeatherMoon" />
-                    <!--<ImageBrush
+                    <ImageBrush
                         x:Key="LogoImageBrush"
                         AlignmentY="Center"
-                        Source="/Assets/BlackLogo.png"
-                        Stretch="UniformToFill" />-->
+                        Source="/Assets/StaXBlack.png"
+                        Stretch="UniformToFill" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
                     <ui:SymbolIcon
@@ -44,11 +44,11 @@
                         Margin="0"
                         FontSize="21"
                         Symbol="WeatherSunny" />
-                    <!--<ImageBrush
+                    <ImageBrush
                         x:Key="LogoImageBrush"
                         AlignmentY="Center"
-                        Source="/Assets/Logo.png"
-                        Stretch="UniformToFill" />-->
+                        Source="/Assets/StaXWhite.png"
+                        Stretch="UniformToFill" />
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
             <ui:ImageIconSource x:Key="AppLogo" Source="/Assets/StaX.ico" />
@@ -58,12 +58,12 @@
     <Grid>
         <Panel Background="{DynamicResource ApplicationPageBackgroundThemeBrush}" Opacity="0.05">
             <Border
-                Width="892"
+                Width="822"
                 Height="174"
+                Background="{DynamicResource LogoImageBrush}"
                 ClipToBounds="True"
                 CornerRadius="8 0 0 0"
                 RenderOptions.BitmapInterpolationMode="HighQuality" />
-            <!--  Background="{DynamicResource LogoImageBrush}"  -->
         </Panel>
         <ui:NavigationView
             x:Name="nvSample"

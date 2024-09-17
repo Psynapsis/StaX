@@ -12,43 +12,42 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <!--<ResourceDictionary.ThemeDictionaries>
+            <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Light">
                     <ImageBrush
                         x:Key="LogoImageBrush"
                         AlignmentY="Center"
-                        Source="/Assets/BlackLogo.png"
+                        Source="/Assets/StaXBlack.png"
                         Stretch="UniformToFill" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
                     <ImageBrush
                         x:Key="LogoImageBrush"
                         AlignmentY="Center"
-                        Source="/Assets/Logo.png"
+                        Source="/Assets/StaXWhite.png"
                         Stretch="UniformToFill" />
                 </ResourceDictionary>
-            </ResourceDictionary.ThemeDictionaries>-->
+            </ResourceDictionary.ThemeDictionaries>
             <ui:ImageIconSource x:Key="AppLogo" Source="/Assets/StaX.ico" />
         </ResourceDictionary>
     </UserControl.Resources>
 
     <Panel Background="{DynamicResource ApplicationPageBackgroundThemeBrush}">
         <Border
-            Width="892"
-            Height="174"
+            Width="900"
+            Height="200"
+            Background="{DynamicResource LogoImageBrush}"
             ClipToBounds="True"
             CornerRadius="8 0 0 0"
             RenderOptions.BitmapInterpolationMode="HighQuality" />
 
-        <!--  Background="{DynamicResource LogoImageBrush}"  -->
-
         <ui:IconSourceElement
-            Width="150"
-            Height="150"
-            Margin="-920,0,0,-100"
+            Width="170"
+            Height="170"
+            Margin="-900,0,0,-140"
             IconSource="{StaticResource AppLogo}" />
         <Grid
-            Margin="0,0,0,-120"
+            Margin="0,0,0,-140"
             HorizontalAlignment="Center"
             VerticalAlignment="Center">
             <ui:ItemsRepeater ItemsSource="{Binding PluginLoaderVisualizator.Icons}">

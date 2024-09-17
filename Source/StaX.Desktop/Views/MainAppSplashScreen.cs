@@ -29,7 +29,7 @@ internal class MainAppSplashScreen(string[]? args, MainWindowViewModel mainWindo
         DataContext = this,
     };
 
-    public int MinimumShowTime => 1000;
+    public int MinimumShowTime => 1200;
 
     public Action? InitApp { get; set; }
 
