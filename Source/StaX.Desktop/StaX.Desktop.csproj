@@ -13,6 +13,7 @@
     <Company>ADVIN</Company>
     <FileVersion>1.1.0.0</FileVersion>
     <Platforms>x64</Platforms>
+    <PublishDir>../../Publish</PublishDir>
     <PackageId>$(AssemblyName)</PackageId>
     <AssemblyName>StaX</AssemblyName>
   </PropertyGroup>
