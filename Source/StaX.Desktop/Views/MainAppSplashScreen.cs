@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 
 namespace StaX.Desktop.Views;
 
-internal class MainAppSplashScreen(string[]? args, MainWindowViewModel mainWindowViewModel) : ReactiveValidationObject, IApplicationSplashScreen
+internal class MainAppSplashScreen(string[]? args, MainWindowViewModel mainWindowViewModel)
+    : ReactiveValidationObject, IApplicationSplashScreen
 {
     private readonly ServiceLocator _serviceLocator = new();
 

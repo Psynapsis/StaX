@@ -31,7 +31,8 @@
             Margin="0,-30,0,0"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            ClipToBounds="True">
+            ClipToBounds="True"
+            RenderOptions.BitmapInterpolationMode="HighQuality">
             <TextBlock
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"

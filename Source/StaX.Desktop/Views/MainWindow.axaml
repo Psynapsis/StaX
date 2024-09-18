@@ -64,7 +64,11 @@
                     FontSize="280"
                     FontWeight="Regular"
                     Foreground="{DynamicResource LogoBrush}"
-                    Text="StaX" />
+                    Text="StaX">
+                    <TextBlock.Effect>
+                        <BlurEffect Radius="1" />
+                    </TextBlock.Effect>
+                </TextBlock>
             </Border>
         </Panel>
         <ui:NavigationView
