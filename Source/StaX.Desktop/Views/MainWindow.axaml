@@ -32,11 +32,7 @@
                         Margin="0"
                         FontSize="21"
                         Symbol="WeatherMoon" />
-                    <ImageBrush
-                        x:Key="LogoImageBrush"
-                        AlignmentY="Center"
-                        Source="/Assets/StaXBlack.png"
-                        Stretch="UniformToFill" />
+                    <SolidColorBrush x:Key="LogoBrush" Color="Black" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
                     <ui:SymbolIcon
@@ -44,11 +40,7 @@
                         Margin="0"
                         FontSize="21"
                         Symbol="WeatherSunny" />
-                    <ImageBrush
-                        x:Key="LogoImageBrush"
-                        AlignmentY="Center"
-                        Source="/Assets/StaXWhite.png"
-                        Stretch="UniformToFill" />
+                    <SolidColorBrush x:Key="LogoBrush" Color="White" />
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
             <ui:ImageIconSource x:Key="AppLogo" Source="/Assets/StaX.ico" />
@@ -58,12 +50,22 @@
     <Grid>
         <Panel Background="{DynamicResource ApplicationPageBackgroundThemeBrush}" Opacity="0.05">
             <Border
-                Width="822"
-                Height="174"
-                Background="{DynamicResource LogoImageBrush}"
+                Width="900"
+                Height="250"
+                Margin="0,-30,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
                 ClipToBounds="True"
-                CornerRadius="8 0 0 0"
-                RenderOptions.BitmapInterpolationMode="HighQuality" />
+                RenderOptions.BitmapInterpolationMode="HighQuality">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontFamily="/Assets/MajorMonoDisplay-Regular.ttf#"
+                    FontSize="280"
+                    FontWeight="Regular"
+                    Foreground="{DynamicResource LogoBrush}"
+                    Text="StaX" />
+            </Border>
         </Panel>
         <ui:NavigationView
             x:Name="nvSample"

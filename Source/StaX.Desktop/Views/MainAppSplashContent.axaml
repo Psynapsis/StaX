@@ -14,18 +14,10 @@
         <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Light">
-                    <ImageBrush
-                        x:Key="LogoImageBrush"
-                        AlignmentY="Center"
-                        Source="/Assets/StaXBlack.png"
-                        Stretch="UniformToFill" />
+                    <SolidColorBrush x:Key="LogoBrush" Color="Black" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
-                    <ImageBrush
-                        x:Key="LogoImageBrush"
-                        AlignmentY="Center"
-                        Source="/Assets/StaXWhite.png"
-                        Stretch="UniformToFill" />
+                    <SolidColorBrush x:Key="LogoBrush" Color="White" />
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
             <ui:ImageIconSource x:Key="AppLogo" Source="/Assets/StaX.ico" />
@@ -35,11 +27,20 @@
     <Panel Background="{DynamicResource ApplicationPageBackgroundThemeBrush}">
         <Border
             Width="900"
-            Height="200"
-            Background="{DynamicResource LogoImageBrush}"
-            ClipToBounds="True"
-            CornerRadius="8 0 0 0"
-            RenderOptions.BitmapInterpolationMode="HighQuality" />
+            Height="250"
+            Margin="0,-30,0,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            ClipToBounds="True">
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="/Assets/MajorMonoDisplay-Regular.ttf#"
+                FontSize="280"
+                FontWeight="Regular"
+                Foreground="{DynamicResource LogoBrush}"
+                Text="StaX" />
+        </Border>
 
         <ui:IconSourceElement
             Width="170"

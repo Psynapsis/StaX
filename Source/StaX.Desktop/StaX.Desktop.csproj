@@ -28,8 +28,6 @@
 
   <ItemGroup>
     <Content Include="Assets\StaX.ico" />
-    <Content Include="Assets\StaXBlack.png" />
-    <Content Include="Assets\StaXWhite.png" />
   </ItemGroup>
 
   <ItemGroup>

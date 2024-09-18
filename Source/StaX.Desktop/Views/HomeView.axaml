@@ -27,8 +27,9 @@
                 <TextBlock
                     Margin="0,0,0,30"
                     HorizontalAlignment="Center"
-                    FontSize="50"
-                    FontWeight="ExtraBold"
+                    FontFamily="/Assets/MajorMonoDisplay-Regular.ttf#"
+                    FontSize="48"
+                    FontWeight="400"
                     Text="StaX" />
                 <ItemsControl
                     Margin="1"
