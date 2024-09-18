@@ -13,7 +13,7 @@ StaX is a cross-platform application built on Avalonia and Fluent Avalonia, desi
 
 _Main window of the application:_
 
-![Main Window](https://imgur.com/a/mdXp74u)
+![Main Window](./Assets/MainWindow.png)
 
 ## Installation and Usage
 
