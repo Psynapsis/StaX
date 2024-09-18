@@ -48,7 +48,7 @@ To add a plugin to StaX, follow these steps:
 1. Create a new project or library that uses the [`StaX.Domain`](https://github.com/Psynapsis/StaX.Domain) package.
 2. Implement your plugin by creating a class that inherits from [`StaX.Domain.UiState`](https://github.com/Psynapsis/StaX.Domain/blob/main/Source/StaX.Domain/UiState.cs).
 3. Build the plugin as a DLL.
-4. Place the compiled plugin in the `Plugins` folder next to the StaX main application.
+4. Place the compiled plugin folder in the `Plugins` folder next to the main StaX application.
 5. StaX will automatically load and display the plugin the next time it runs.
 
 ## Example Plugin
