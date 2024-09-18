@@ -74,6 +74,26 @@
             MenuItemsSource="{Binding AvailableStates}"
             PaneDisplayMode="LeftCompact"
             SelectedItem="{Binding SelectedState}">
+            <ui:NavigationView.Resources>
+                <VisualBrush x:Key="ViewBack" Stretch="UniformToFill">
+                    <VisualBrush.Visual>
+                        <Image
+                            Opacity="0.2"
+                            Source="/Assets/StaX.jpg"
+                            Stretch="UniformToFill">
+                            <Image.Effect>
+                                <BlurEffect Radius="10" />
+                            </Image.Effect>
+                        </Image>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </ui:NavigationView.Resources>
+
+            <ui:NavigationView.Styles>
+                <Style Selector="ContentPresenter#PART_PanePresenter">
+                    <Setter Property="Background" Value="{DynamicResource ViewBack}" />
+                </Style>
+            </ui:NavigationView.Styles>
             <ui:NavigationView.MenuItemTemplate>
                 <DataTemplate>
                     <ui:NavigationViewItem
@@ -83,6 +103,7 @@
                 </DataTemplate>
             </ui:NavigationView.MenuItemTemplate>
         </ui:NavigationView>
+
         <Button
             MinWidth="27"
             MinHeight="27"
