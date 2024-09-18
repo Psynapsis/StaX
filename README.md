@@ -1,7 +1,7 @@
 
 # StaX
 
-StaX is a application built on [Avalonia](https://github.com/AvaloniaUI) and [Fluent Avalonia](https://github.com/amwx/FluentAvalonia), designed to load and display plugins with various functionalities. The application utilizes the [`StaX.Domain`](https://github.com/Psynapsis/StaX.Domain) NuGet library, allowing you to easily extend its capabilities by developing your own plugins.
+StaX is an application built on [Avalonia](https://github.com/AvaloniaUI) and [Fluent Avalonia](https://github.com/amwx/FluentAvalonia), designed to load and display plugins with various functionalities. The application utilizes the [`StaX.Domain`](https://github.com/Psynapsis/StaX.Domain) NuGet library, allowing you to easily extend its capabilities by developing your own plugins.
 
 ## Key Features
 
