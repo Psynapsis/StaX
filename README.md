@@ -1,13 +1,13 @@
 
 # StaX
 
-StaX is a cross-platform application built on Avalonia and Fluent Avalonia, designed to load and display plugins with various functionalities. The application utilizes the `StaX.Domain` NuGet library, allowing you to easily extend its capabilities by developing your own plugins.
+StaX is a application built on Avalonia and [Fluent Avalonia](https://github.com/amwx/FluentAvalonia), designed to load and display plugins with various functionalities. The application utilizes the [`StaX.Domain`](https://github.com/Psynapsis/StaX.Domain) NuGet library, allowing you to easily extend its capabilities by developing your own plugins.
 
 ## Key Features
 
 - **Plugin Loading**: You can add plugins to the application by simply placing them in the `Plugins` folder. StaX will automatically detect and display them.
-- **Flexibility**: Plugins are implemented as descendants of the `UiState` class from the `StaX.Domain` library. This allows you to develop plugins with any functionality and seamlessly integrate them into the main application.
-- **Modern UI**: The app leverages Avalonia and Fluent Avalonia, providing a modern and user-friendly interface.
+- **Flexibility**: Plugins are implemented as descendants of the [`UiState`](https://github.com/Psynapsis/StaX.Domain/blob/main/Source/StaX.Domain/UiState.cs) class from the [`StaX.Domain`](https://www.nuget.org/packages/StaX.Domain) library. This allows you to develop plugins with any functionality and seamlessly integrate them into the main application.
+- **Modern UI**: The app leverages Avalonia and [Fluent Avalonia](https://github.com/amwx/FluentAvalonia), providing a modern and user-friendly interface.
 
 ## Screenshots
 
@@ -19,7 +19,7 @@ _Main window of the application:_
 
 ### Requirements
 To run StaX, you will need:
-- .NET 6 or higher
+- .NET 8 or higher
 - [StaX.Domain NuGet package](https://www.nuget.org/packages/StaX.Domain)
 
 ### Building
@@ -45,8 +45,8 @@ To run StaX, you will need:
 
 To add a plugin to StaX, follow these steps:
 
-1. Create a new project or library that uses the `StaX.Domain` package.
-2. Implement your plugin by creating a class that inherits from `StaX.Domain.UiState`.
+1. Create a new project or library that uses the [`StaX.Domain`](https://github.com/Psynapsis/StaX.Domain) package.
+2. Implement your plugin by creating a class that inherits from [`StaX.Domain.UiState`](https://github.com/Psynapsis/StaX.Domain/blob/main/Source/StaX.Domain/UiState.cs).
 3. Build the plugin as a DLL.
 4. Place the compiled plugin in the `Plugins` folder next to the StaX main application.
 5. StaX will automatically load and display the plugin the next time it runs.
