@@ -2,6 +2,7 @@
 using FluentAvalonia.UI.Windowing;
 using ReactiveUI;
 using ReactiveUI.Validation.Helpers;
+using StaX.Desktop.Models;
 using StaX.Desktop.ViewModels;
 using System;
 using System.Collections.Specialized;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace StaX.Desktop.Views;
 
-internal class MainAppSplashScreen(string[]? args, MainWindowViewModel mainWindowViewModel)
+internal class MainAppSplashScreen(StartupArgs args, MainWindowViewModel mainWindowViewModel)
     : ReactiveValidationObject, IApplicationSplashScreen
 {
     private readonly ServiceLocator _serviceLocator = new();

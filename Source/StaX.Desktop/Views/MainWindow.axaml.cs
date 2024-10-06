@@ -4,6 +4,7 @@ using Avalonia.Styling;
 using FluentAvalonia.UI.Windowing;
 using System;
 using StaX.Desktop.ViewModels;
+using StaX.Desktop.Models;
 
 namespace StaX.Desktop.Views;
 
@@ -15,7 +16,7 @@ public partial class MainWindow : AppWindow
         DataContext = mainWindowViewModel;
         AvaloniaXamlLoader.Load(this);
 
-        SplashScreen = new MainAppSplashScreen(null, mainWindowViewModel);
+        SplashScreen = new MainAppSplashScreen(StartupArgs.Empty, mainWindowViewModel);
         TitleBar.ExtendsContentIntoTitleBar = true;
         TitleBar.TitleBarHitTestType = TitleBarHitTestType.Complex;
 
@@ -26,7 +27,7 @@ public partial class MainWindow : AppWindow
             Application.Current.ActualThemeVariantChanged += OnActualThemeVariantChanged;
     }
 
-    public MainWindow(string[]? args)
+    public MainWindow(StartupArgs args)
     {
         var mainWindowViewModel = new MainWindowViewModel();
         DataContext = mainWindowViewModel;

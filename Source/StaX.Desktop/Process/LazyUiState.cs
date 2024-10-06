@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 using StaX.Domain;
+using StaX.Desktop.Models;
 
 namespace StaX.Desktop.Process;
 

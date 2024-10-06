@@ -1,6 +1,6 @@
 ﻿using FluentAvalonia.UI.Controls;
 
-namespace StaX.Desktop.Process;
+namespace StaX.Desktop.Models;
 
 public class Starter
 {

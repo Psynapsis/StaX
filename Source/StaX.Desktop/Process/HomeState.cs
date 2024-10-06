@@ -8,7 +8,7 @@ using StaX.Domain;
 
 namespace StaX.Desktop.Process;
 
-public class HomeState : UiState, ITransientUiState
+public class HomeState : UiState
 {
     public override string StateName { get; protected set; } = "Home";
 
@@ -18,8 +18,8 @@ public class HomeState : UiState, ITransientUiState
 
     public List<LazyUiState> States { get; }
 
-    private Subject<Transition> _transitionSubject = new();
-    public IObservable<Transition> OnTransitionChanged => _transitionSubject;
+    private Subject<LazyUiState> _transitionSubject = new();
+    public IObservable<LazyUiState> OnTransitionChanged => _transitionSubject;
 
     public HomeState(List<LazyUiState> states)
     {

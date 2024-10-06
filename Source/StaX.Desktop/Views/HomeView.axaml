@@ -78,7 +78,7 @@
                                             Margin="7"
                                             Padding="0"
                                             Command="{Binding $parent[ItemsControl].DataContext.SendSubjectCommand}"
-                                            CommandParameter="{Binding StateName}"
+                                            CommandParameter="{Binding}"
                                             CornerRadius="15">
                                             <Border
                                                 Width="280"

@@ -1,27 +1,27 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.ReactiveUI;
 using Avalonia.Markup.Xaml;
-using System;
-using System.IO;
-using System.Threading.Tasks;
+using StaX.Desktop.Models;
 using StaX.Desktop.Views;
+using System;
+using System.Threading.Tasks;
 
 namespace StaX.Desktop;
 
 public partial class App : Application
 {
-    private readonly string[]? _args = null;
+    private readonly StartupArgs _args;
 
     public App(string[]? args)
     {
-        _args = args;
+        _args = new(args);
         AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
     }
 
     public App()
     {
+        _args = StartupArgs.Empty;
         AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
     }

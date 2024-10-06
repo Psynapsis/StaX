@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using StaX.Desktop.Process;
 using StaX.Desktop.Views;
 using Avalonia.Threading;
+using StaX.Desktop.Models;
 
 namespace StaX.Desktop;
 
@@ -19,7 +20,7 @@ internal class ServiceLocator
     private const string PluginsDir = "Plugins";
     private PluginLoaderVisualizator? _pluginLoaderVisualizator;
 
-    public Task RegisterAsync(PluginLoaderVisualizator pluginLoaderVisualizator, string[]? args)
+    public Task RegisterAsync(PluginLoaderVisualizator pluginLoaderVisualizator, StartupArgs args)
     {
         _pluginLoaderVisualizator = pluginLoaderVisualizator;
         var serviceCollection = new ServiceCollection();
@@ -30,15 +31,15 @@ internal class ServiceLocator
         return Task.CompletedTask;
     }
 
-    private void LoadPlugins(IServiceCollection services, string[]? args)
+    private void LoadPlugins(IServiceCollection services, StartupArgs args)
     {
         try
         {
             List<LazyUiState> states = [];
             List<string> statesStrings = [];
 
-            if (args is not null)
-                foreach (var unknownString in args)
+            if (args.NotEmpty)
+                foreach (var unknownString in args.Args)
                     if (unknownString.Contains(".stx", StringComparison.CurrentCultureIgnoreCase))
                         statesStrings.Add(unknownString);
 

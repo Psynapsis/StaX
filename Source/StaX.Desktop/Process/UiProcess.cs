@@ -13,6 +13,8 @@ public class UiProcess
 {
     private readonly Subject<UiTransition> _stateChangedSubject = new();
 
+    private HomeState _homeState;
+
     public List<LazyUiState> AvailableStates { get; } = [];
 
     public IObservable<UiTransition> StateChanged => _stateChangedSubject;
@@ -20,10 +22,10 @@ public class UiProcess
     public async Task AddStatesAsync(IEnumerable<LazyUiState> uiStateTridderPairs)
     {
         await Dispatcher.UIThread.InvokeAsync(() => {
-            var home = new HomeState(uiStateTridderPairs.ToList());
-            home.OnTransitionChanged.Subscribe(Transit);
+            _homeState = new HomeState(uiStateTridderPairs.ToList());
+            _homeState.OnTransitionChanged.Subscribe(Transit);
 
-            var lazyHome = new LazyUiState(home);
+            var lazyHome = new LazyUiState(_homeState);
             AvailableStates.Add(lazyHome);
             AvailableStates.Add(uiStateTridderPairs);
 
@@ -39,6 +41,7 @@ public class UiProcess
         await Task.CompletedTask;
     }
 
+    private void Transit(LazyUiState lazyUiState) => _stateChangedSubject.OnNext(new(lazyUiState?.UiState ?? _homeState));
     private void Transit(UiTransition uiTransition) => _stateChangedSubject.OnNext(uiTransition);
     private async void Transit(Transition transition)
     {
