@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "StaX.Runner": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Users\\MegaD\\StaX\\Build\\Plugins\\RedButton\\Plugin\\RedButton.dll"
+    }
+  }
+}

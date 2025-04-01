@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "StaX.RunnerHost": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Users\\MegaD\\StaX\\Build\\Plugins\\DbMigrationPlugin\\Plugin\\DbMigrationPlugin.dll"
+    }
+  }
+}

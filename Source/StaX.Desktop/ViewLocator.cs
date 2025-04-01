@@ -9,7 +9,7 @@ public class ViewLocator : IDataTemplate
     public Control? Build(object? data)
     {
         if (data is not null && data is LazyUiState uiState)
-        {
+        { 
             if (uiState.UiState is not null)
             {
                 var control = uiState.UiState.StateView;
@@ -21,4 +21,4 @@ public class ViewLocator : IDataTemplate
     }
 
     public bool Match(object? data) => data is LazyUiState;
-}
+} 
