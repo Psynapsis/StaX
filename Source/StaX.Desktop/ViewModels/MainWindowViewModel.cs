@@ -3,13 +3,13 @@ using Avalonia.Styling;
 using Avalonia.Threading;
 using ReactiveUI;
 using Splat;
+using StaX.Desktop.Process;
+using StaX.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
-using StaX.Desktop.Process;
-using StaX.Domain;
 
 namespace StaX.Desktop.ViewModels;
 
@@ -74,24 +74,14 @@ public class MainWindowViewModel : ViewModelBase
         if (_uiProcess is not null && uiStateTridderPairs is not null)
         {
             await _uiProcess.AddStatesAsync(uiStateTridderPairs);
-            AvailableStates = new List<LazyUiState>(_uiProcess.AvailableStates);
+            AvailableStates = [.. _uiProcess.AvailableStates];
             _uiProcess!.StateChanged.Subscribe(SetTransitionState);
         }
 
         if (AvailableStates?.Count == 2)
-            SelectedState = AvailableStates.LastOrDefault();
+            SetState(AvailableStates.LastOrDefault());
         else if (AvailableStates?.Count > 0)
-            SelectedState = AvailableStates.FirstOrDefault();
-
-        if (AvailableStates is not null)
-            foreach (var state in AvailableStates)
-            {
-                if (state.IsLoaded == false)
-                    await state.InitializeAsync();
-
-                if (state.UiState is UiState uiState)
-                    uiState.Initialize(Locator.Current, TopLevelWidget.GetInstance());
-            }
+            SetState(AvailableStates.FirstOrDefault());
     }
 
     private void SetTransitionState(UiTransition selectedState)
@@ -99,12 +89,10 @@ public class MainWindowViewModel : ViewModelBase
         var lazyState = _uiProcess.AvailableStates.Where(x => x.StateName == selectedState.State.StateName).FirstOrDefault();
         if (lazyState is not null)
         {
-            this.RaiseAndSetIfChanged(ref _selectedState, lazyState);
             if (selectedState.Parameter is not null)
-                SetState(_selectedState, selectedState.Parameter);
+                SetState(lazyState, selectedState.Parameter);
             else
-                SetState(_selectedState);
-            this.RaisePropertyChanged(nameof(SelectedState));
+                SetState(lazyState);
         }
     }
 
@@ -112,16 +100,21 @@ public class MainWindowViewModel : ViewModelBase
     {
         if (selectedState is not null)
         {
+            this.RaiseAndSetIfChanged(ref _selectedState, selectedState);
             Dispatcher.UIThread.Invoke(async () =>
             {
                 if (CurrentStateContent is not null && CurrentStateContent.UiState is not null)
                     await CurrentStateContent.UiState.StateViewModel.ExitActionAsync();
+
+                await LoadSelectedStateAsync(selectedState);
 
                 CurrentStateContent = selectedState;
 
                 if (CurrentStateContent is not null && CurrentStateContent.UiState is not null)
                     await CurrentStateContent.UiState.StateViewModel.EntryActionAsync();
             });
+            this.RaisePropertyChanged(nameof(SelectedState));
+            this.RaisePropertyChanged(nameof(CurrentStateContent));
         }
     }
 
@@ -129,16 +122,33 @@ public class MainWindowViewModel : ViewModelBase
     {
         if (selectedState is not null)
         {
+            this.RaiseAndSetIfChanged(ref _selectedState, selectedState);
             Dispatcher.UIThread.Invoke(async () =>
             {
                 if (CurrentStateContent is not null && CurrentStateContent.UiState is not null)
                     await CurrentStateContent.UiState.StateViewModel.ExitActionAsync();
+
+                await LoadSelectedStateAsync(selectedState);
 
                 CurrentStateContent = selectedState;
 
                 if (CurrentStateContent is not null && CurrentStateContent.UiState is not null)
                     await CurrentStateContent.UiState.StateViewModel.EntryActionAsync(parameter);
             });
+            this.RaisePropertyChanged(nameof(SelectedState));
+            this.RaisePropertyChanged(nameof(CurrentStateContent));
         }
+    }
+
+    private static async Task LoadSelectedStateAsync(LazyUiState selectedState)
+    {
+        if (selectedState.IsLoaded == false)
+            await selectedState.InitializeAsync();
+
+        if (selectedState.UiState != null
+            && selectedState.UiState is UiState uiState
+            && (uiState.DependencyResolver is null
+            || uiState.TopLevel is null))
+            uiState.Initialize(Locator.Current, TopLevelWidget.GetInstance());
     }
 }

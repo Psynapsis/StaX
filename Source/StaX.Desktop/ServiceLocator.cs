@@ -1,17 +1,19 @@
-﻿using DynamicData;
+﻿using Avalonia.Threading;
+using DynamicData;
 using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
+using ReactiveUI;
 using Splat.Microsoft.Extensions.DependencyInjection;
+using StaX.Desktop.Models;
+using StaX.Desktop.Process;
+using StaX.Desktop.Views;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using StaX.Desktop.Process;
-using StaX.Desktop.Views;
-using Avalonia.Threading;
-using StaX.Desktop.Models;
 
 namespace StaX.Desktop;
 
@@ -44,7 +46,7 @@ internal class ServiceLocator
                         statesStrings.Add(unknownString);
 
             if (statesStrings.Count > 0)
-                states.AddRange(LoadXtoolPlugins(statesStrings));
+                states.AddRange(LoadStaxPlugins(statesStrings));
 
             if (states.Count < 1)
             {
@@ -56,7 +58,7 @@ internal class ServiceLocator
 
                 var files = Directory.GetFiles(pluginsFullDir);
                 var stx = files.Where(f => !string.IsNullOrEmpty(f) && f.Contains(".stx", StringComparison.OrdinalIgnoreCase));
-                states.Add(LoadXtoolPlugins(stx));
+                states.Add(LoadStaxPlugins(stx));
             }
 
             services.AddSingleton(states);
@@ -68,7 +70,7 @@ internal class ServiceLocator
         }
     }
 
-    private IEnumerable<LazyUiState> LoadXtoolPlugins(IEnumerable<string> pathXtools)
+    private IEnumerable<LazyUiState> LoadStaxPlugins(IEnumerable<string> pathStax)
     {
         var states = new List<LazyUiState>();
         try
@@ -78,7 +80,7 @@ internal class ServiceLocator
             if (!Directory.Exists(tempDirectory))
                 Directory.CreateDirectory(tempDirectory);
 
-            foreach (var tool in pathXtools)
+            foreach (var tool in pathStax)
             {
                 string destinationFolder = Path.Combine(tempDirectory, Path.GetFileNameWithoutExtension(tool));
 
@@ -133,6 +135,7 @@ internal class ServiceLocator
                 _pluginLoaderVisualizator.Icons = collection;
             }
         });
+        _pluginLoaderVisualizator?.RaisePropertyChanged(nameof(_pluginLoaderVisualizator.Icons));
     }
 
     private LazyUiState GetLazy(string path)

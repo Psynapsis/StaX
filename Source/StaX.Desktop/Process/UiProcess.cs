@@ -1,11 +1,11 @@
 ﻿using Avalonia.Threading;
 using DynamicData;
+using StaX.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using StaX.Domain;
 
 namespace StaX.Desktop.Process;
 
@@ -21,9 +21,10 @@ public class UiProcess
 
     public async Task AddStatesAsync(IEnumerable<LazyUiState> uiStateTridderPairs)
     {
-        await Dispatcher.UIThread.InvokeAsync(() => {
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
             _homeState = new HomeState(uiStateTridderPairs.ToList());
-            _homeState.OnTransitionChanged.Subscribe(Transit);
+            _homeState.OnTransitionChanged.Subscribe(async (lazyUiState) => await TransitAsync(lazyUiState));
 
             var lazyHome = new LazyUiState(_homeState);
             AvailableStates.Add(lazyHome);
@@ -41,8 +42,16 @@ public class UiProcess
         await Task.CompletedTask;
     }
 
-    private void Transit(LazyUiState lazyUiState) => _stateChangedSubject.OnNext(new(lazyUiState?.UiState ?? _homeState));
+    private async Task TransitAsync(LazyUiState lazyUiState)
+    {
+        if (lazyUiState is not null && lazyUiState.IsLoaded == false)
+            await lazyUiState.InitializeAsync();
+        
+        _stateChangedSubject.OnNext(new(lazyUiState?.UiState ?? _homeState));
+    }
+
     private void Transit(UiTransition uiTransition) => _stateChangedSubject.OnNext(uiTransition);
+    
     private async void Transit(Transition transition)
     {
         try

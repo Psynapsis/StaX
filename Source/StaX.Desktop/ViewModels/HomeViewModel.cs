@@ -1,12 +1,11 @@
 ﻿using Avalonia.Collections;
 using Avalonia.ReactiveUI;
 using ReactiveUI;
-using System;
+using StaX.Desktop.Process;
+using StaX.Domain;
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Subjects;
-using StaX.Desktop.Process;
-using StaX.Domain;
 
 namespace StaX.Desktop.ViewModels;
 
@@ -35,7 +34,7 @@ public class HomeViewModel : ViewModelBase
 
     public HomeViewModel(List<LazyUiState> States, Subject<LazyUiState> subject)
     {
-        _states = new(States);
+        _states = [.. States];
         _subject = subject;
         SendSubjectCommand = ReactiveCommand.Create<LazyUiState>(
             execute: SendSubject,

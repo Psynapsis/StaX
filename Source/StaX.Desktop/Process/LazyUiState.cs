@@ -1,14 +1,16 @@
 ﻿using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
+using StaX.Desktop.Models;
+using StaX.Domain;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using StaX.Domain;
-using StaX.Desktop.Models;
 
 namespace StaX.Desktop.Process;
 
@@ -32,7 +34,7 @@ public class LazyUiState
     {
         UiState = state;
         _currentPluginFolder = string.Empty;
-        IsLoaded = true;
+        IsLoaded = UiState is not null;
     }
 
     public LazyUiState(string currentPluginFolder)
@@ -67,7 +69,7 @@ public class LazyUiState
                 var state = GetUiStateFromDll(pathToDll);
                 if (state is not null)
                     LoadNativeRuntimeDlls(Path.Combine(_currentPluginFolder, "Plugin"));
-                
+
                 UiState = state;
             }
             IsLoaded = UiState is not null;
@@ -114,25 +116,40 @@ public class LazyUiState
         {
             var assembly = Assembly.LoadFrom(path);
 
-            foreach (var type in assembly.GetTypes())
-                if (typeof(IUiState).IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract)
+            var types = GetTypesSafe(assembly).Where(x => typeof(IUiState).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract);
+            foreach (var thisType in types)
+            {
+                if (thisType is not null)
                 {
-                    var types = assembly.GetTypes().Where(x => typeof(IUiState).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract);
-                    foreach (var thisType in types)
-                    {
-                        var uiStateObject = Activator.CreateInstance(thisType);
+                    var uiStateObject = Activator.CreateInstance(thisType);
 
-                        var uiState = uiStateObject as IUiState;
+                    var uiState = uiStateObject as IUiState;
 
-                        if (uiState is not null)
-                            return uiState;
-                    }
+                    if (uiState is not null)
+                        return uiState;
                 }
+            }
         }
-        catch
+        catch (Exception ex)
         {
         }
         return null;
+    }
+
+    private static List<Type> GetTypesSafe(Assembly assembly)
+    {
+        try
+        {
+            return [.. assembly.GetTypes()];
+        }
+        catch (ReflectionTypeLoadException ex)
+        {
+            foreach (var loaderException in ex.LoaderExceptions)
+                if (loaderException is FileLoadException fileLoadException)
+                    Console.WriteLine("IS NOT LOADED!!! => " + fileLoadException.FileName);
+
+            return [.. ex.Types.Where(x => x is not null).ToList()];
+        }
     }
 
     private static void LoadNativeRuntimeDlls(string path)
