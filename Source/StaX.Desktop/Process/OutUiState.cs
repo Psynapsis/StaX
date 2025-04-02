@@ -2,7 +2,6 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Platform;
-using Avalonia.VisualTree;
 using FluentAvalonia.UI.Controls;
 using StaX.Desktop.Models;
 using StaX.Domain;
@@ -16,7 +15,7 @@ using Path = System.IO.Path;
 
 namespace StaX.Desktop.Process;
 
-public class OutUiState : TemplatedControl, IUiState, INativeControl
+public class OutUiState : TemplatedControl, INativeControl
 {
     [DllImport("user32.dll")]
     private static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
@@ -82,28 +81,23 @@ public class OutUiState : TemplatedControl, IUiState, INativeControl
         using var server = new NamedPipeServerStream(_name, PipeDirection.In);
         server.WaitForConnection();
         using var reader = new BinaryReader(server);
-        _childHwnd = (IntPtr)reader.ReadInt64();
+        var current = reader.ReadInt64();
+        _childHwnd = (IntPtr)current;
     }
 
     private IDisposable _boundsSubscription;
 
-    private void UpdateChildWindowPosition(Rect bounds)
+    private void UpdateChildWindowPosition(Rect bounds, double scaling)
     {
         // Получаем абсолютные координаты контрола относительно TopLevel
         var gridHost = _topLevel.GetControl<Grid>("ChildGridHost");
         var transform = gridHost.TransformToVisual(_topLevel);
         var positionInTopLevel = transform?.Transform(new Point(0, 0)) ?? new Point(0, 0);
 
-        // Учитываем DPI scaling
-        var scaling = _topLevel.GetVisualRoot()?.RenderScaling ?? 1;
-
-        // Конвертируем в экранные координаты
-        var screenPoint = _topLevel.PointToScreen(positionInTopLevel);
-
-        int x = (int)(screenPoint.X * scaling);
-        int y = (int)(screenPoint.Y * scaling);
-        int width = (int)(gridHost.Bounds.Width * scaling);
-        int height = (int)(gridHost.Bounds.Height * scaling);
+        int x = (int)(bounds.X * scaling);
+        int y = (int)(bounds.Y * scaling);
+        int width = (int)(bounds.Width * scaling);
+        int height = (int)(bounds.Height * scaling);
 
         if (_childHwnd != IntPtr.Zero)
         {
@@ -121,6 +115,12 @@ public class OutUiState : TemplatedControl, IUiState, INativeControl
 
     public IPlatformHandle CreateControl(IPlatformHandle parent)
     {
+        // Use reflection to get the Scaling property value
+        var scaleProperty = parent.GetType().GetProperty("Scaling");
+        double scale = 1.0;
+        if (scaleProperty != null && scaleProperty.GetValue(parent) is double currentScale)
+            scale = currentScale;
+
         StartChildProcess();
         ReceiveHwndAsync().GetAwaiter().GetResult();
 
@@ -129,9 +129,9 @@ public class OutUiState : TemplatedControl, IUiState, INativeControl
 
         var gridHost = _topLevel.GetControl<Grid>("ChildGridHost");
 
-        UpdateChildWindowPosition(gridHost.Bounds);
+        UpdateChildWindowPosition(gridHost.Bounds, scale);
         _boundsSubscription = gridHost.GetObservable(BoundsProperty)
-            .Subscribe(UpdateChildWindowPosition);
+            .Subscribe(rect => UpdateChildWindowPosition(rect, scale));
 
         return new PlatformHandle(_childHwnd, "HWND");
     }

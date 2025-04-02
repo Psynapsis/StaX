@@ -9,12 +9,7 @@ using System.Threading.Tasks;
 
 namespace StaX.Desktop.Process;
 
-public interface IState<TControl> where TControl : Control
-{
-    TControl? UiState { get; }
-}
-
-public class LazyUiState : IState<OutUiState>
+public class LazyUiState
 {
     public bool IsLoaded { get; private set; }
 
@@ -44,8 +39,8 @@ public class LazyUiState : IState<OutUiState>
         => await Dispatcher.UIThread.InvokeAsync(() =>
         {
             _topLevel ??= TopLevelWidget.GetInstance();
-            UiState ??= new OutUiState(_starter, _topLevel, _currentPluginFolder);
-            UiState?.Load();
+            var uiState = new OutUiState(_starter, _topLevel, _currentPluginFolder);
+            uiState?.Load();
 
             if (_nativeHost is null)
             {
@@ -53,9 +48,9 @@ public class LazyUiState : IState<OutUiState>
                 _nativeHost = nativeEmbedPage.GetControl<NativeHost>("ChildWindowHost");
             }
 
-            _nativeHost.Implementation = UiState;
+            _nativeHost.Implementation = uiState;
 
-            IsLoaded = UiState is not null;
+            IsLoaded = uiState is not null;
         });
 
     private static Starter? TryLoadStarter(string path)

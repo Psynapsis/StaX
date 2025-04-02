@@ -108,8 +108,8 @@
                 </DataTemplate>
             </ui:NavigationView.MenuItemTemplate>
 
-            <Grid x:Name="ChildGridHost">
-                <process:NativeEmbedPage x:Name="ChildPageHost" Margin="0,33,0,0" />
+            <Grid x:Name="ChildGridHost" Margin="0,33,0,0">
+                <process:NativeEmbedPage x:Name="ChildPageHost" />
             </Grid>
         </ui:NavigationView>
 
