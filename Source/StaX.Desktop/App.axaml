@@ -11,27 +11,27 @@
         <local:ViewLocator />
     </Application.DataTemplates>
 
-	<Application.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-
-				<ResourceInclude Source="/Styles/ControlThemes/TextBoxControlThemes.axaml" />
-				<ResourceInclude Source="/Styles/ControlThemes/NumericBoxControlThemes.axaml" />
-
-			</ResourceDictionary.MergedDictionaries>
-		</ResourceDictionary>
-	</Application.Resources>
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Styles/ControlThemes/TextBoxControlThemes.axaml" />
+                <ResourceInclude Source="/Styles/ControlThemes/NumericBoxControlThemes.axaml" />
+                <!--<ResourceInclude Source="/Process/NativeEmbedPage.axaml" />-->
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
 
     <Application.Styles>
-		<sty:FluentAvaloniaTheme PreferSystemTheme="True" PreferUserAccentColor="True" />
+        <sty:FluentAvaloniaTheme PreferSystemTheme="True" PreferUserAccentColor="True" />
 
-		<StyleInclude Source="/Styles/ComboBoxStyles.axaml" /> 
-		<StyleInclude Source="/Styles/GridSplitterStyles.axaml" />
-		<StyleInclude Source="/Styles/ListBoxStyles.axaml" />
-		<StyleInclude Source="/Styles/NavigationViewStyles.axaml" />
-		<StyleInclude Source="/Styles/NumberBoxStyles.axaml" />
-		<StyleInclude Source="/Styles/TextBoxStyles.axaml" />
-		<StyleInclude Source="/Styles/TextBlockStyles.axaml" />
+        <StyleInclude Source="/Styles/ComboBoxStyles.axaml" />
+        <StyleInclude Source="/Styles/GridSplitterStyles.axaml" />
+        <StyleInclude Source="/Styles/ListBoxStyles.axaml" />
+        <StyleInclude Source="/Styles/NavigationViewStyles.axaml" />
+        <StyleInclude Source="/Styles/NumberBoxStyles.axaml" />
+        <StyleInclude Source="/Styles/TextBoxStyles.axaml" />
+        <StyleInclude Source="/Styles/TextBlockStyles.axaml" />
+        <!--<StyleInclude Source="/Styles/OutUiState.axaml" />-->
 
-	</Application.Styles>
+    </Application.Styles>
 </Application>

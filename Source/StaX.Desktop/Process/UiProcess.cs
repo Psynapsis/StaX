@@ -26,8 +26,8 @@ public class UiProcess
             _homeState = new HomeState(uiStateTridderPairs.ToList());
             _homeState.OnTransitionChanged.Subscribe(async (lazyUiState) => await TransitAsync(lazyUiState));
 
-            var lazyHome = new LazyUiState(_homeState);
-            AvailableStates.Add(lazyHome);
+            //var lazyHome = new LazyUiState(_homeState);
+            //AvailableStates.Add(lazyHome);
             AvailableStates.Add(uiStateTridderPairs);
 
             foreach (var uiState in uiStateTridderPairs.Where(x => x is ITransientUiState || x is ICanMoveUiState))
@@ -47,7 +47,7 @@ public class UiProcess
         if (lazyUiState is not null && lazyUiState.IsLoaded == false)
             await lazyUiState.InitializeAsync();
         
-        _stateChangedSubject.OnNext(new(lazyUiState?.UiState ?? _homeState));
+        _stateChangedSubject.OnNext(new(lazyUiState?.UiState as IUiState ?? _homeState));
     }
 
     private void Transit(UiTransition uiTransition) => _stateChangedSubject.OnNext(uiTransition);
@@ -78,6 +78,6 @@ public class UiProcess
                 return new UiTransition(uiState.UiState, transition.Parameter);
         }
 
-        return new UiTransition(availableStates.FirstOrDefault(x => x.IsLoaded)?.UiState ?? new HomeState([]));
+        return new UiTransition(availableStates.FirstOrDefault(x => x.IsLoaded)?.UiState as IUiState ?? new HomeState([]));
     }
 }

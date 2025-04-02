@@ -12,8 +12,7 @@ public class ViewLocator : IDataTemplate
         { 
             if (uiState.UiState is not null)
             {
-                var control = uiState.UiState.StateView;
-                control.DataContext = uiState.UiState.StateViewModel;
+                var control = (uiState.UiState as OutUiState).StateView;
                 return control;
             }
         }

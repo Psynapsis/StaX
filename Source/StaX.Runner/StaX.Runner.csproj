@@ -9,7 +9,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <OutDir>../../RunnerBuild</OutDir>
+    <OutDir>../../Build/Runner</OutDir>
     <PackageId>$(AssemblyName)</PackageId>
     <AssemblyName>StaXRunner</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

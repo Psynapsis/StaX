@@ -1,49 +1,62 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using StaX.Desktop.Models;
 using StaX.Domain;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace StaX.Desktop.Process;
 
-public class LazyUiState
+public interface IState<TControl> where TControl : Control
+{
+    TControl? UiState { get; }
+}
+
+public class LazyUiState : IState<OutUiState>
 {
     public bool IsLoaded { get; private set; }
 
-    public string StateName => _starter?.Name ?? UiState?.StateName ?? string.Empty;
+    public string StateName => _starter?.Name ?? string.Empty;
 
-    public string ToolTip => _starter?.ToolTip ?? UiState?.ToolTip ?? string.Empty;
+    public string ToolTip => _starter?.ToolTip ?? string.Empty;
 
-    public Symbol? Icon => _starter?.Symbol ?? UiState?.Icon ?? Symbol.ShareAndroid;
+    public Symbol? Icon => _starter?.Symbol ?? Symbol.ShareAndroid;
 
-    public IUiState? UiState { get; private set; }
+    public OutUiState? UiState { get; private set; }
 
     private readonly string _currentPluginFolder;
 
-    private readonly Starter? _starter;
+    private readonly Starter _starter;
 
-    public LazyUiState(IUiState state)
-    {
-        UiState = state;
-        _currentPluginFolder = string.Empty;
-        IsLoaded = UiState is not null;
-    }
+    private TopLevel? _topLevel;
+
+    private NativeHost? _nativeHost;
 
     public LazyUiState(string currentPluginFolder)
     {
-        _starter = TryLoadStarter(currentPluginFolder);
         _currentPluginFolder = currentPluginFolder;
-
-        if (_starter is null)
-            Initialize();
+        _starter = TryLoadStarter(currentPluginFolder);
     }
+
+    public async Task InitializeAsync()
+        => await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            _topLevel ??= TopLevelWidget.GetInstance();
+            UiState ??= new OutUiState(_starter, _topLevel, _currentPluginFolder);
+            UiState?.Load();
+
+            if (_nativeHost is null)
+            {
+                var nativeEmbedPage = _topLevel.GetControl<NativeEmbedPage>("ChildPageHost");
+                _nativeHost = nativeEmbedPage.GetControl<NativeHost>("ChildWindowHost");
+            }
+
+            _nativeHost.Implementation = UiState;
+
+            IsLoaded = UiState is not null;
+        });
 
     private static Starter? TryLoadStarter(string path)
     {
@@ -57,109 +70,5 @@ public class LazyUiState
             //inore
         }
         return null;
-    }
-
-    public async Task InitializeAsync()
-        => await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            if (_starter is not null)
-            {
-                var pathToDll = Path.Combine(_currentPluginFolder, "Plugin", _starter.Implementer);
-                var state = GetUiStateFromDll(pathToDll);
-                if (state is not null)
-                    LoadNativeRuntimeDlls(Path.Combine(_currentPluginFolder, "Plugin"));
-
-                UiState = state;
-            }
-            IsLoaded = UiState is not null;
-
-        });
-
-    private void Initialize()
-        => Dispatcher.UIThread.Invoke(() =>
-        {
-            var state = GetUiStateFromFolder(_currentPluginFolder);
-            if (state is not null)
-                LoadNativeRuntimeDlls(_currentPluginFolder);
-
-            UiState = state;
-            IsLoaded = UiState is not null;
-        });
-
-    private static IUiState? GetUiStateFromFolder(string path)
-    {
-        try
-        {
-            var dllFiles = Directory.GetFiles(path, "*.dll");
-            if (dllFiles.Length == 0)
-                dllFiles = Directory.GetFiles(Path.Combine(path, "Plugin"), "*.dll");
-
-            foreach (var dllFile in dllFiles)
-            {
-                var uiState = GetUiStateFromDll(dllFile);
-                if (uiState != null)
-                    return uiState;
-            }
-        }
-        catch
-        {
-            //ignore
-        }
-
-        return null;
-    }
-
-    private static IUiState? GetUiStateFromDll(string path)
-    {
-        try
-        {
-            var assembly = Assembly.LoadFrom(path);
-
-            var types = GetTypesSafe(assembly).Where(x => typeof(IUiState).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract);
-            foreach (var thisType in types)
-            {
-                if (thisType is not null)
-                {
-                    var uiStateObject = Activator.CreateInstance(thisType);
-
-                    var uiState = uiStateObject as IUiState;
-
-                    if (uiState is not null)
-                        return uiState;
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-        }
-        return null;
-    }
-
-    private static List<Type> GetTypesSafe(Assembly assembly)
-    {
-        try
-        {
-            return [.. assembly.GetTypes()];
-        }
-        catch (ReflectionTypeLoadException ex)
-        {
-            foreach (var loaderException in ex.LoaderExceptions)
-                if (loaderException is FileLoadException fileLoadException)
-                    Console.WriteLine("IS NOT LOADED!!! => " + fileLoadException.FileName);
-
-            return [.. ex.Types.Where(x => x is not null).ToList()];
-        }
-    }
-
-    private static void LoadNativeRuntimeDlls(string path)
-    {
-        var pathToNativeRuntimeDlls = Path.Combine(path, "runtimes", RuntimeInformation.RuntimeIdentifier, "native");
-        if (Directory.Exists(pathToNativeRuntimeDlls))
-            foreach (var file in Directory.EnumerateFiles(pathToNativeRuntimeDlls))
-                try
-                {
-                    NativeLibrary.Load(file);
-                }
-                catch {  /*not implemented*/ }
     }
 }

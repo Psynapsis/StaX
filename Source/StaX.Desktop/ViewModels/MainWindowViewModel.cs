@@ -144,11 +144,5 @@ public class MainWindowViewModel : ViewModelBase
     {
         if (selectedState.IsLoaded == false)
             await selectedState.InitializeAsync();
-
-        if (selectedState.UiState != null
-            && selectedState.UiState is UiState uiState
-            && (uiState.DependencyResolver is null
-            || uiState.TopLevel is null))
-            uiState.Initialize(Locator.Current, TopLevelWidget.GetInstance());
     }
 }

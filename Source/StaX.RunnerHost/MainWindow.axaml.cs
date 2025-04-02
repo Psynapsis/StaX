@@ -58,7 +58,7 @@ public partial class MainWindow : AppWindow
     {
         var processStartInfo = new ProcessStartInfo
         {
-            FileName = @"C:\Users\MegaD\StaX\RunnerBuild\StaXRunner.exe",
+            FileName = @"C:\Users\konopelko-shumkovski\StaX\RunnerBuild\StaXRunner.exe",
             Arguments = $"{_path}",
             UseShellExecute = false,
             RedirectStandardOutput = true,
@@ -95,9 +95,9 @@ public partial class MainWindow : AppWindow
                     _childHwnd,
                     IntPtr.Zero,
                     (int)bounds.X,
-                    (int)bounds.Y,
-                    (int)(bounds.Width * 1.5),
-                    (int)(bounds.Height * 1.5),
+                    (int)bounds.Y + 32,
+                    (int)(bounds.Width),
+                    (int)(bounds.Height - 32),
                     SWP_NOZORDER
                 );
             });

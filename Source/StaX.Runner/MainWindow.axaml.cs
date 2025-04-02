@@ -14,6 +14,8 @@ namespace StaX.Runner;
 
 public partial class MainWindow : AppWindow
 {
+    private string _fileName;
+
     public MainWindow()
     {
         var mainWindowViewModel = new MainWindowViewModel();
@@ -44,15 +46,16 @@ public partial class MainWindow : AppWindow
         }).SafeFireAndForget();
     }
 
-    public MainWindow(IUiState uiState)
+    public MainWindow(IUiState uiState, string fileName)
     {
+        _fileName = fileName;
         var mainWindowViewModel = new MainWindowViewModel(uiState);
         DataContext = mainWindowViewModel;
         AvaloniaXamlLoader.Load(this);
 
         TitleBar.ExtendsContentIntoTitleBar = true;
         TitleBar.TitleBarHitTestType = TitleBarHitTestType.Complex;
-        this.Opened += (s, e) => SendHwndToParent();
+        this.Opened += (s, e) => SendHwndToParent(_fileName);
 
         this.AttachDevTools();
     }

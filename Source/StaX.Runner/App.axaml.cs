@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Shapes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using Splat;
@@ -20,12 +21,15 @@ public partial class App : Application
     [DllImport("kernel32", SetLastError = true)]
     static extern bool SetDllDirectory(string lpPathName);
 
+    private string _fileName;
+
     public App()
     {
     }
 
     public App(string[] args)
     {
+        _fileName = System.IO.Path.GetFileName(args[0]);
         var uiState = LoadPlugin(args[0]);
 
         if (uiState != null)
@@ -45,7 +49,7 @@ public partial class App : Application
         if (_uiState is not null)
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-                desktop.MainWindow = new MainWindow(_uiState);
+                desktop.MainWindow = new MainWindow(_uiState, _fileName);
 
             if (_uiState is UiState state)
                 Dispatcher.UIThread.Invoke(() => state.Initialize(Locator.Current, TopLevelWidget.GetInstance()));
@@ -58,7 +62,7 @@ public partial class App : Application
 
     private static void LoadNativeRuntimeDlls(string path)
     {
-        var pathToNativeRuntimeDlls = Path.Combine(path, "runtimes", RuntimeInformation.RuntimeIdentifier, "native");
+        var pathToNativeRuntimeDlls = System.IO.Path.Combine(path, "runtimes", RuntimeInformation.RuntimeIdentifier, "native");
         if (Directory.Exists(pathToNativeRuntimeDlls))
             foreach (var file in Directory.EnumerateFiles(pathToNativeRuntimeDlls))
                 try
@@ -78,7 +82,7 @@ public partial class App : Application
 
     private static IUiState? LoadPlugin(string path)
     {
-        var fullPath = Path.Combine(Environment.CurrentDirectory, path);
+        var fullPath = System.IO.Path.Combine(Environment.CurrentDirectory, path);
         List<IUiState> states = [];
 
         var pluginFolder = Directory.GetParent(fullPath);
@@ -118,6 +122,22 @@ public partial class App : Application
     private static IEnumerable<Type> GetAllTypesThatImplementInterface<T>(string path)
     => AppDomain.CurrentDomain.GetAssemblies()
             .Where(x => x.Location.Contains(path, StringComparison.CurrentCultureIgnoreCase))
-            .SelectMany(x => x.GetTypes())
+            .SelectMany(GetTypesSafe)
             .Where(x => typeof(T).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract);
+
+    private static List<Type> GetTypesSafe(Assembly assembly)
+    {
+        try
+        {
+            return [.. assembly.GetTypes()];
+        }
+        catch (ReflectionTypeLoadException ex)
+        {
+            foreach (var loaderException in ex.LoaderExceptions)
+                if (loaderException is FileLoadException fileLoadException)
+                    Console.WriteLine("IS NOT LOADED!!! => " + fileLoadException.FileName);
+
+            return [.. ex.Types.Where(x => x is not null).ToList()];
+        }
+    }
 }

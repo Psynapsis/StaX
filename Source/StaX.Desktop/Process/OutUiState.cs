@@ -1,18 +1,22 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Platform;
+using Avalonia.VisualTree;
+using FluentAvalonia.UI.Controls;
 using StaX.Desktop.Models;
+using StaX.Domain;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Runtime.InteropServices;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Path = System.IO.Path;
 
 namespace StaX.Desktop.Process;
 
-public class OutUiState : UserControl
+public class OutUiState : TemplatedControl, IUiState, INativeControl
 {
     [DllImport("user32.dll")]
     private static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
@@ -35,46 +39,36 @@ public class OutUiState : UserControl
     private readonly TopLevel _topLevel;
     private System.Diagnostics.Process? _process;
 
-    private readonly string _currentPluginFolder;
-
     private readonly Starter? _starter;
 
-    public OutUiState(TopLevel topLevel, string currentPluginFolder)
+    public ViewModelBase StateViewModel { get; set; } = new();
+
+    public UserControl StateView { get; set; } = new();
+
+    public string StateName => _starter?.Name ?? string.Empty;
+
+    public string ToolTip => _starter?.ToolTip ?? string.Empty;
+
+    public Symbol? Icon => _starter?.Symbol ?? Symbol.Add;
+
+    public OutUiState(Starter starter, TopLevel topLevel, string currentPluginFolder)
     {
+        _starter = starter;
         _topLevel = topLevel;
-        _starter = TryLoadStarter(currentPluginFolder);
-        _currentPluginFolder = currentPluginFolder;
 
-        _name = Path.Combine(currentPluginFolder, _starter?.Implementer);
-        _path = _starter.Implementer;
+        _name = _starter?.Implementer ?? string.Empty;
+        _path = Path.Combine(currentPluginFolder, "Plugin", _starter?.Implementer ?? string.Empty);
     }
 
-    private static Starter? TryLoadStarter(string path)
+    public async void Load()
     {
-        try
-        {
-            var json = File.ReadAllText(Path.Combine(path, "start.json"));
-            return JsonSerializer.Deserialize<Starter>(json);
-        }
-        catch
-        {
-            //inore
-        }
-        return null;
-    }
-
-    private async void OnLoaded(object? sender, EventArgs e)
-    {
-        StartChildProcess();
-        await ReceiveHwndAsync();
-        EmbedChildWindow();
     }
 
     private void StartChildProcess()
     {
         var processStartInfo = new ProcessStartInfo
         {
-            FileName = @"C:\Users\MegaD\StaX\RunnerBuild\StaXRunner.exe",
+            FileName = @"Runner\StaXRunner.exe",
             Arguments = $"{_path}",
             UseShellExecute = false,
             RedirectStandardOutput = true,
@@ -85,41 +79,60 @@ public class OutUiState : UserControl
 
     private async Task ReceiveHwndAsync()
     {
-        await Task.Run(() =>
-        {
-            using var server = new NamedPipeServerStream(_name, PipeDirection.In);
-            server.WaitForConnection();
-            using var reader = new BinaryReader(server);
-            _childHwnd = (IntPtr)reader.ReadInt64();
-        });
+        using var server = new NamedPipeServerStream(_name, PipeDirection.In);
+        server.WaitForConnection();
+        using var reader = new BinaryReader(server);
+        _childHwnd = (IntPtr)reader.ReadInt64();
     }
 
-    private void EmbedChildWindow()
+    private IDisposable _boundsSubscription;
+
+    private void UpdateChildWindowPosition(Rect bounds)
     {
-        try
+        // Получаем абсолютные координаты контрола относительно TopLevel
+        var gridHost = _topLevel.GetControl<Grid>("ChildGridHost");
+        var transform = gridHost.TransformToVisual(_topLevel);
+        var positionInTopLevel = transform?.Transform(new Point(0, 0)) ?? new Point(0, 0);
+
+        // Учитываем DPI scaling
+        var scaling = _topLevel.GetVisualRoot()?.RenderScaling ?? 1;
+
+        // Конвертируем в экранные координаты
+        var screenPoint = _topLevel.PointToScreen(positionInTopLevel);
+
+        int x = (int)(screenPoint.X * scaling);
+        int y = (int)(screenPoint.Y * scaling);
+        int width = (int)(gridHost.Bounds.Width * scaling);
+        int height = (int)(gridHost.Bounds.Height * scaling);
+
+        if (_childHwnd != IntPtr.Zero)
         {
-            IntPtr parentHwnd = _topLevel.TryGetPlatformHandle()!.Handle;
-
-            _ = SetWindowLong(_childHwnd, GWL_STYLE, WS_VISIBLE | WS_CHILD);
-
-            SetParent(_childHwnd, parentHwnd);
-
-            var hostControl = this.FindControl<Control>("HostArea");
-            hostControl?.GetObservable(BoundsProperty).Subscribe(bounds =>
-            {
-                SetWindowPos(
-                    _childHwnd,
-                    IntPtr.Zero,
-                    (int)bounds.X,
-                    (int)bounds.Y,
-                    (int)(bounds.Width * 1.5),
-                    (int)(bounds.Height * 1.5),
-                    SWP_NOZORDER
-                );
-            });
+            SetWindowPos(
+                _childHwnd,
+                IntPtr.Zero,
+                x,
+                y,
+                width,
+                height,
+                SWP_NOZORDER
+            );
         }
-        catch (Exception)
-        {
-        }
+    }
+
+    public IPlatformHandle CreateControl(IPlatformHandle parent)
+    {
+        StartChildProcess();
+        ReceiveHwndAsync().GetAwaiter().GetResult();
+
+        var kek = SetWindowLong(_childHwnd, GWL_STYLE, WS_VISIBLE | WS_CHILD);
+        var ptr = SetParent(_childHwnd, parent.Handle);
+
+        var gridHost = _topLevel.GetControl<Grid>("ChildGridHost");
+
+        UpdateChildWindowPosition(gridHost.Bounds);
+        _boundsSubscription = gridHost.GetObservable(BoundsProperty)
+            .Subscribe(UpdateChildWindowPosition);
+
+        return new PlatformHandle(_childHwnd, "HWND");
     }
 }
