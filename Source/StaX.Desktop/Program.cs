@@ -10,8 +10,7 @@ internal class Program
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
     // yet and stuff might break.
     [STAThread]
-    public static void Main(string[] args) => (args is null ? BuildAvaloniaApp() : BuildAvaloniaApp(args))
-            .StartWithClassicDesktopLifetime(args ?? []);
+    public static void Main(string[] args) => BuildAvaloniaApp(args).StartWithClassicDesktopLifetime(args ?? []);
 
     public static AppBuilder BuildAvaloniaApp(string[]? args = null) =>
         AppBuilder.Configure(() => new App(args))

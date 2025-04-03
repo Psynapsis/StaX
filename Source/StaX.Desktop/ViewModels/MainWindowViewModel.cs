@@ -4,7 +4,6 @@ using Avalonia.Threading;
 using ReactiveUI;
 using Splat;
 using StaX.Desktop.Process;
-using StaX.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;

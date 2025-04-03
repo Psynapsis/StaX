@@ -1,6 +1,5 @@
 ﻿using Avalonia.Threading;
 using DynamicData;
-using StaX.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,12 +45,12 @@ public class UiProcess
     {
         if (lazyUiState is not null && lazyUiState.IsLoaded == false)
             await lazyUiState.InitializeAsync();
-        
+
         //_stateChangedSubject.OnNext(new(lazyUiState?.UiState as IUiState ?? _homeState));
     }
 
     private void Transit(UiTransition uiTransition) => _stateChangedSubject.OnNext(uiTransition);
-    
+
     private async void Transit(Transition transition)
     {
         try

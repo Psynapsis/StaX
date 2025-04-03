@@ -1,10 +1,9 @@
 ﻿using FluentAvalonia.UI.Controls;
+using StaX.Desktop.ViewModels;
+using StaX.Desktop.Views;
 using System;
 using System.Collections.Generic;
 using System.Reactive.Subjects;
-using StaX.Desktop.ViewModels;
-using StaX.Desktop.Views;
-using StaX.Domain;
 
 namespace StaX.Desktop.Process;
 

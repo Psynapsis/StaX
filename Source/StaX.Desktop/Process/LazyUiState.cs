@@ -2,7 +2,6 @@
 using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using StaX.Desktop.Models;
-using StaX.Domain;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;

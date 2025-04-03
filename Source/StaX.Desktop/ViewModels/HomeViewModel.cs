@@ -2,7 +2,6 @@
 using Avalonia.ReactiveUI;
 using ReactiveUI;
 using StaX.Desktop.Process;
-using StaX.Domain;
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Subjects;

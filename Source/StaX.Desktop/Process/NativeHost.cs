@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Platform;
-using StaX.Domain;
 
 namespace StaX.Desktop.Process
 {

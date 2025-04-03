@@ -36,11 +36,11 @@
             <TextBlock
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                FontFamily="/Assets/MajorMonoDisplay-Regular.ttf#"
                 FontSize="280"
                 FontWeight="Regular"
                 Foreground="{DynamicResource LogoBrush}"
                 Text="StaX" />
+                <!--FontFamily="/Assets/MajorMonoDisplayRegular.ttf#"-->
         </Border>
 
         <ui:IconSourceElement

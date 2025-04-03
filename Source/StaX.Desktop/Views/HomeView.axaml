@@ -27,10 +27,10 @@
                 <TextBlock
                     Margin="0,0,0,30"
                     HorizontalAlignment="Center"
-                    FontFamily="/Assets/MajorMonoDisplay-Regular.ttf#"
                     FontSize="48"
                     FontWeight="400"
                     Text="StaX" />
+                    <!--FontFamily="/Assets/MajorMonoDisplayRegular.ttf#"-->
                 <ItemsControl
                     Margin="1"
                     HorizontalAlignment="Center"

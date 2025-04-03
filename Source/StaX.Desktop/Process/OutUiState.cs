@@ -4,7 +4,6 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Platform;
 using FluentAvalonia.UI.Controls;
 using StaX.Desktop.Models;
-using StaX.Domain;
 using System;
 using System.Diagnostics;
 using System.IO;
