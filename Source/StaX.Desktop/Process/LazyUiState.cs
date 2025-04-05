@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace StaX.Desktop.Process;
 
-public class LazyUiState
+public class LazyUiState : ContentControl
 {
     public bool IsLoaded { get; private set; }
 
@@ -26,7 +26,7 @@ public class LazyUiState
 
     private TopLevel? _topLevel;
 
-    private NativeHost? _nativeHost;
+    //private NativeHost? _nativeHost;
 
     public LazyUiState(string currentPluginFolder)
     {
@@ -37,19 +37,12 @@ public class LazyUiState
     public async Task InitializeAsync()
         => await Dispatcher.UIThread.InvokeAsync(() =>
         {
-            _topLevel ??= TopLevelWidget.GetInstance();
-            var uiState = new OutUiState(_starter, _topLevel, _currentPluginFolder);
-            uiState?.Load();
-
-            if (_nativeHost is null)
+            if (IsLoaded == false)
             {
-                var nativeEmbedPage = _topLevel.GetControl<NativeEmbedPage>("ChildPageHost");
-                _nativeHost = nativeEmbedPage.GetControl<NativeHost>("ChildWindowHost");
+                _topLevel ??= TopLevelWidget.GetInstance();
+                Content = new OutUiState(_starter, _currentPluginFolder);
             }
-
-            _nativeHost.Implementation = uiState;
-
-            IsLoaded = uiState is not null;
+            IsLoaded = Content is not null;
         });
 
     private static Starter? TryLoadStarter(string path)

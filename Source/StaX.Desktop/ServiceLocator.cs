@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace StaX.Desktop;
@@ -27,7 +26,10 @@ internal class ServiceLocator
         _pluginLoaderVisualizator = pluginLoaderVisualizator;
         var serviceCollection = new ServiceCollection();
 
-        LoadPlugins(serviceCollection, args);
+        Dispatcher.UIThread.Invoke(() =>
+        {
+            LoadPlugins(serviceCollection, args);
+        });
         serviceCollection.UseMicrosoftDependencyResolver();
 
         return Task.CompletedTask;
@@ -64,7 +66,7 @@ internal class ServiceLocator
             services.AddSingleton(states);
             services.AddSingleton<UiProcess>();
         }
-        catch
+        catch (Exception ex)
         {
             //ignore
         }

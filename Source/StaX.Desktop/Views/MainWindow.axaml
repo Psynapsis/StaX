@@ -49,7 +49,10 @@
     </Window.Resources>
 
     <Grid>
-        <Panel Background="{DynamicResource ApplicationPageBackgroundThemeBrush}" Opacity="0.05">
+        <Panel
+            x:Name="KEK1"
+            Background="{DynamicResource ApplicationPageBackgroundThemeBrush}"
+            Opacity="0.05">
             <Border
                 Width="900"
                 Height="250"
@@ -65,7 +68,7 @@
                     FontWeight="Regular"
                     Foreground="{DynamicResource LogoBrush}"
                     Text="StaX">
-                    <!--FontFamily="/Assets/MajorMonoDisplayRegular.ttf#"-->
+                    <!--  FontFamily="/Assets/MajorMonoDisplayRegular.ttf#"  -->
                     <TextBlock.Effect>
                         <BlurEffect Radius="1" />
                     </TextBlock.Effect>
@@ -107,12 +110,7 @@
                         ToolTip.Tip="{Binding ToolTip}" />
                 </DataTemplate>
             </ui:NavigationView.MenuItemTemplate>
-
-            <Grid x:Name="ChildGridHost" Margin="0,33,0,0">
-                <process:NativeEmbedPage x:Name="ChildPageHost" />
-            </Grid>
         </ui:NavigationView>
-
         <Button
             MinWidth="27"
             MinHeight="27"

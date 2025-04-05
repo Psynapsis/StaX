@@ -3,38 +3,23 @@ using Avalonia.Platform;
 
 namespace StaX.Desktop.Process
 {
-    public class NativeHost : NativeControlHost
-    {
-        private INativeControl? _implementation;
-        public INativeControl? Implementation
-        {
-            get => _implementation;
-            set
-            {
-                _implementation = value;
-                var platformHandle = GetTopLevel()?.TryGetPlatformHandle();
-                if (platformHandle is not null)
-                    CreateNativeControlCore(platformHandle);
-            }
-        }
+    //public class NativeHost : NativeControlHost
+    //{
+    //    protected override IPlatformHandle CreateNativeControlCore(IPlatformHandle parent)
+    //    {
+    //        return Implementation?.CreateControl(parent)
+    //            ?? base.CreateNativeControlCore(parent);
+    //    }
 
-        private static TopLevel? GetTopLevel() => TopLevelWidget.GetInstance();
+    //    protected override void DestroyNativeControlCore(IPlatformHandle control)
+    //    {
+    //        base.DestroyNativeControlCore(control);
+    //    }
+    //}
 
-        protected override IPlatformHandle CreateNativeControlCore(IPlatformHandle parent)
-        {
-            return Implementation?.CreateControl(parent)
-                ?? base.CreateNativeControlCore(parent);
-        }
-
-        protected override void DestroyNativeControlCore(IPlatformHandle control)
-        {
-            base.DestroyNativeControlCore(control);
-        }
-    }
-
-    public interface INativeControl
-    {
-        /// <param name="parent"></param>
-        IPlatformHandle CreateControl(IPlatformHandle parent);
-    }
+    //public interface INativeControl
+    //{
+    //    /// <param name="parent"></param>
+    //    IPlatformHandle CreateControl(IPlatformHandle parent);
+    //}
 }

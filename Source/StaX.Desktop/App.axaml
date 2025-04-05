@@ -32,6 +32,7 @@
         <StyleInclude Source="/Styles/TextBoxStyles.axaml" />
         <StyleInclude Source="/Styles/TextBlockStyles.axaml" />
         <!--<StyleInclude Source="/Styles/OutUiState.axaml" />-->
+        <StyleInclude Source="/Styles/LazyUiState.axaml" />
 
     </Application.Styles>
 </Application>

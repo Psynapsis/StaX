@@ -77,6 +77,6 @@ public class UiProcess
         //        return new UiTransition(uiState.UiState, transition.Parameter);
         //}
 
-        return new UiTransition(availableStates.FirstOrDefault(x => x.IsLoaded)?.UiState as IUiState ?? new HomeState([]));
+        return new UiTransition(availableStates.FirstOrDefault(x => x.IsLoaded)?.Content as IUiState ?? new HomeState([]));
     }
 }

@@ -102,15 +102,9 @@ public class MainWindowViewModel : ViewModelBase
             this.RaiseAndSetIfChanged(ref _selectedState, selectedState);
             Dispatcher.UIThread.Invoke(async () =>
             {
-                if (CurrentStateContent is not null && CurrentStateContent.UiState is not null)
-                    await CurrentStateContent.UiState.StateViewModel.ExitActionAsync();
-
                 await LoadSelectedStateAsync(selectedState);
 
                 CurrentStateContent = selectedState;
-
-                if (CurrentStateContent is not null && CurrentStateContent.UiState is not null)
-                    await CurrentStateContent.UiState.StateViewModel.EntryActionAsync();
             });
             this.RaisePropertyChanged(nameof(SelectedState));
             this.RaisePropertyChanged(nameof(CurrentStateContent));
@@ -124,15 +118,9 @@ public class MainWindowViewModel : ViewModelBase
             this.RaiseAndSetIfChanged(ref _selectedState, selectedState);
             Dispatcher.UIThread.Invoke(async () =>
             {
-                if (CurrentStateContent is not null && CurrentStateContent.UiState is not null)
-                    await CurrentStateContent.UiState.StateViewModel.ExitActionAsync();
-
                 await LoadSelectedStateAsync(selectedState);
 
                 CurrentStateContent = selectedState;
-
-                if (CurrentStateContent is not null && CurrentStateContent.UiState is not null)
-                    await CurrentStateContent.UiState.StateViewModel.EntryActionAsync(parameter);
             });
             this.RaisePropertyChanged(nameof(SelectedState));
             this.RaisePropertyChanged(nameof(CurrentStateContent));

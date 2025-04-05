@@ -8,13 +8,9 @@ public class ViewLocator : IDataTemplate
 {
     public Control? Build(object? data)
     {
-        if (data is not null && data is LazyUiState uiState)
+        if (data is not null && data is Control uiState)
         { 
-            if (uiState.UiState is not null)
-            {
-                var control = uiState.UiState.StateView;
-                return control;
-            }
+            return uiState;
         }
         return null;
     }
